@@ -60,6 +60,7 @@ const navItems = ["About", "Skills", "Projects", "Achievements", "Contact"];
 function App() {
   const [dark, setDark] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const stored = localStorage.getItem("portfolio-theme");
@@ -68,18 +69,87 @@ function App() {
     document.documentElement.classList.toggle("dark", shouldUseDark);
   }, []);
 
+  useEffect(() => {
+    const sections = document.querySelectorAll("section[id]");
+    const observerOptions = {
+      root: null,
+      rootMargin: "-50% 0px -50% 0px",
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
+
   const toggleTheme = () => {
     const next = !dark;
     setDark(next);
-    document.documentElement.classList.toggle("dark", next);
+    if (next) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
     localStorage.setItem("portfolio-theme", next ? "dark" : "light");
   };
 
+  const getBackgroundGradient = () => {
+    const gradients = {
+      home: dark ? "bg-slate-950" : "bg-slate-50",
+      about: dark
+        ? "bg-gradient-to-br from-slate-950 to-cyan-950/30"
+        : "bg-gradient-to-br from-slate-50 to-cyan-50",
+      skills: dark
+        ? "bg-gradient-to-br from-slate-950 to-violet-950/30"
+        : "bg-gradient-to-br from-slate-50 to-violet-50",
+      projects: dark
+        ? "bg-gradient-to-br from-slate-950 to-blue-950/30"
+        : "bg-gradient-to-br from-slate-50 to-blue-50",
+      achievements: dark
+        ? "bg-gradient-to-br from-slate-950 to-amber-950/30"
+        : "bg-gradient-to-br from-slate-50 to-amber-50",
+      contact: dark
+        ? "bg-gradient-to-br from-slate-950 to-emerald-950/30"
+        : "bg-gradient-to-br from-slate-50 to-emerald-50",
+    };
+    return gradients[activeSection as keyof typeof gradients] || gradients.home;
+  };
+
+  const getAccentColors = () => {
+    const accents = {
+      home: { left: "bg-cyan-400/20", right: "bg-violet-500/15" },
+      about: { left: "bg-cyan-400/30", right: "bg-cyan-300/20" },
+      skills: { left: "bg-violet-400/30", right: "bg-violet-300/20" },
+      projects: { left: "bg-blue-400/30", right: "bg-blue-300/20" },
+      achievements: { left: "bg-amber-400/30", right: "bg-amber-300/20" },
+      contact: { left: "bg-emerald-400/30", right: "bg-emerald-300/20" },
+    };
+    return accents[activeSection as keyof typeof accents] || accents.home;
+  };
+
+  const accent = getAccentColors();
+
   return (
-    <div className="min-h-screen overflow-hidden bg-slate-50 text-slate-900 selection:bg-cyan-300 selection:text-slate-950 dark:bg-slate-950 dark:text-slate-100">
+    <div
+      className={`min-h-screen overflow-hidden text-slate-900 selection:bg-cyan-300 selection:text-slate-950 dark:text-slate-100 transition-colors duration-700 ${getBackgroundGradient()}`}
+    >
       <div className="pointer-events-none fixed inset-0 z-0 bg-grid opacity-50 dark:opacity-35" />
-      <div className="pointer-events-none fixed left-[-8rem] top-24 z-0 h-80 w-80 rounded-full bg-cyan-400/20 blur-3xl" />
-      <div className="pointer-events-none fixed right-[-10rem] top-[35rem] z-0 h-96 w-96 rounded-full bg-violet-500/15 blur-3xl" />
+      <div
+        className={`pointer-events-none fixed left-[-8rem] top-24 z-0 h-80 w-80 rounded-full ${accent.left} blur-3xl transition-colors duration-700`}
+      />
+      <div
+        className={`pointer-events-none fixed right-[-10rem] top-[35rem] z-0 h-96 w-96 rounded-full ${accent.right} blur-3xl transition-colors duration-700`}
+      />
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/60 bg-white/75 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/70">
         <nav className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
@@ -97,15 +167,18 @@ function App() {
           </a>
 
           <div className="hidden items-center gap-7 md:flex">
-            {navItems.map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="nav-link"
-              >
-                {item}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const isActive = activeSection === item.toLowerCase();
+              return (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  className={`nav-link ${isActive ? "rounded-full bg-cyan-100 px-4 py-2 text-cyan-700 dark:bg-cyan-400/20 dark:text-cyan-300" : ""}`}
+                >
+                  {item}
+                </a>
+              );
+            })}
           </div>
 
           <div className="flex items-center gap-2">
@@ -117,7 +190,7 @@ function App() {
               {dark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <a
-              href="mailto:absiddik945@gmail.com"
+              href="#contact"
               className="hidden rounded-full bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-cyan-600 sm:inline-flex dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-300"
             >
               Hire me
@@ -135,16 +208,19 @@ function App() {
         {menuOpen && (
           <div className="border-t border-slate-200 bg-white px-5 py-5 md:hidden dark:border-white/10 dark:bg-slate-950">
             <div className="mx-auto flex max-w-7xl flex-col gap-2">
-              {navItems.map((item) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  onClick={() => setMenuOpen(false)}
-                  className="rounded-xl px-4 py-3 font-medium hover:bg-slate-100 dark:hover:bg-white/5"
-                >
-                  {item}
-                </a>
-              ))}
+              {navItems.map((item) => {
+                const isActive = activeSection === item.toLowerCase();
+                return (
+                  <a
+                    key={item}
+                    href={`#${item.toLowerCase()}`}
+                    onClick={() => setMenuOpen(false)}
+                    className={`rounded-xl px-4 py-3 font-medium hover:bg-slate-100 dark:hover:bg-white/5 ${isActive ? "bg-cyan-100 text-cyan-700 dark:bg-cyan-400/20 dark:text-cyan-300" : ""}`}
+                  >
+                    {item}
+                  </a>
+                );
+              })}
             </div>
           </div>
         )}
@@ -509,13 +585,13 @@ function App() {
                     href={`mailto:${portfolio.email}`}
                     className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-semibold text-slate-950 transition hover:-translate-y-0.5 dark:bg-slate-950 dark:text-white"
                   >
-                    <Mail size={18} /> Email me
+                    <Mail size={18} /> absiddik945@gmail.com
                   </a>
                   <a
                     href={`tel:${portfolio.phone.replace(/\s/g, "")}`}
                     className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 font-semibold transition hover:bg-white/10 dark:border-slate-300 dark:hover:bg-slate-100"
                   >
-                    <Phone size={18} /> Call
+                    <Phone size={18} /> +8801766-229353
                   </a>
                 </div>
               </div>
