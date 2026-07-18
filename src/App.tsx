@@ -182,13 +182,13 @@ function App() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
+            {/* <button
               onClick={toggleTheme}
               className="icon-button"
               aria-label="Toggle theme"
             >
               {dark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+            </button> */}
             <a
               href="#contact"
               className="hidden rounded-full bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-cyan-600 sm:inline-flex dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-300"
@@ -299,19 +299,21 @@ function App() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 py-5">
-                  {portfolio.stats.map((stat) => (
-                    <div
-                      key={stat.label}
-                      className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/[0.04]"
-                    >
-                      <p className="font-display text-2xl font-extrabold text-slate-950 dark:text-white">
-                        {stat.value}
-                      </p>
-                      <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
-                        {stat.label}
-                      </p>
-                    </div>
-                  ))}
+                  {portfolio.stats.map(
+                    (stat: { value: string; label: string }) => (
+                      <div
+                        key={stat.label}
+                        className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/[0.04]"
+                      >
+                        <p className="font-display text-2xl font-extrabold text-slate-950 dark:text-white">
+                          {stat.value}
+                        </p>
+                        <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                          {stat.label}
+                        </p>
+                      </div>
+                    ),
+                  )}
                 </div>
 
                 <div className="space-y-3">
@@ -400,27 +402,29 @@ function App() {
             description="Technologies and working habits I use to move from concept to responsive interface, secure API and structured data."
           />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {portfolio.skills.map((group, index) => (
-              <Reveal key={group.title} delay={index * 60}>
-                <article className="surface-card group h-full p-6 transition duration-300 hover:-translate-y-1 hover:border-cyan-300 dark:hover:border-cyan-400/30">
-                  <div className="flex items-center gap-3">
-                    <div className="grid h-11 w-11 place-items-center rounded-2xl bg-slate-950 text-white transition group-hover:bg-cyan-600 dark:bg-white dark:text-slate-950 dark:group-hover:bg-cyan-300">
-                      <Layers3 size={20} />
+            {portfolio.skills.map(
+              (group: { title: string; items: string[] }, index: number) => (
+                <Reveal key={group.title} delay={index * 60}>
+                  <article className="surface-card group h-full p-6 transition duration-300 hover:-translate-y-1 hover:border-cyan-300 dark:hover:border-cyan-400/30">
+                    <div className="flex items-center gap-3">
+                      <div className="grid h-11 w-11 place-items-center rounded-2xl bg-slate-950 text-white transition group-hover:bg-cyan-600 dark:bg-white dark:text-slate-950 dark:group-hover:bg-cyan-300">
+                        <Layers3 size={20} />
+                      </div>
+                      <h3 className="font-display text-lg font-bold text-slate-950 dark:text-white">
+                        {group.title}
+                      </h3>
                     </div>
-                    <h3 className="font-display text-lg font-bold text-slate-950 dark:text-white">
-                      {group.title}
-                    </h3>
-                  </div>
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {group.items.map((item) => (
-                      <span key={item} className="tag">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </article>
-              </Reveal>
-            ))}
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {group.items.map((item: string) => (
+                        <span key={item} className="tag">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                </Reveal>
+              ),
+            )}
           </div>
         </section>
 
@@ -431,7 +435,7 @@ function App() {
             description="Full-stack projects showing dashboard design, authentication, data operations, reporting, inventory and sales workflows."
           />
           <div className="space-y-7">
-            {portfolio.projects.map((project, index) => (
+            {portfolio.projects.map((project) => (
               <Reveal key={project.title}>
                 <article className="surface-card relative overflow-hidden p-7 sm:p-9">
                   <div
@@ -449,7 +453,7 @@ function App() {
                         {project.description}
                       </p>
                       <div className="mt-6 flex flex-wrap gap-2">
-                        {project.stack.map((item) => (
+                        {project.stack.map((item: string) => (
                           <span className="tag" key={item}>
                             {item}
                           </span>
@@ -472,7 +476,7 @@ function App() {
                         <BriefcaseBusiness size={17} /> Project highlights
                       </div>
                       <ul className="space-y-3">
-                        {project.highlights.map((highlight) => (
+                        {project.highlights.map((highlight: string) => (
                           <li
                             key={highlight}
                             className="flex gap-3 text-sm leading-6 text-slate-600 dark:text-slate-300"
@@ -511,7 +515,7 @@ function App() {
                   </h3>
                 </div>
                 <ul className="mt-7 space-y-4">
-                  {portfolio.achievements.map((achievement) => (
+                  {portfolio.achievements.map((achievement: string) => (
                     <li
                       key={achievement}
                       className="flex gap-3 leading-7 text-slate-600 dark:text-slate-300"
@@ -537,24 +541,30 @@ function App() {
                   </h3>
                 </div>
                 <div className="mt-7 space-y-3">
-                  {portfolio.coding.map((item) => (
-                    <div
-                      key={item.platform}
-                      className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/[0.035]"
-                    >
-                      <div>
-                        <p className="font-bold text-slate-950 dark:text-white">
-                          {item.platform}
-                        </p>
-                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                          {item.detail}
-                        </p>
+                  {portfolio.coding.map(
+                    (item: {
+                      platform: string;
+                      result: string;
+                      detail: string;
+                    }) => (
+                      <div
+                        key={item.platform}
+                        className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/[0.035]"
+                      >
+                        <div>
+                          <p className="font-bold text-slate-950 dark:text-white">
+                            {item.platform}
+                          </p>
+                          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            {item.detail}
+                          </p>
+                        </div>
+                        <span className="rounded-full bg-slate-950 px-3 py-1.5 text-xs font-bold text-white dark:bg-white dark:text-slate-950">
+                          {item.result}
+                        </span>
                       </div>
-                      <span className="rounded-full bg-slate-950 px-3 py-1.5 text-xs font-bold text-white dark:bg-white dark:text-slate-950">
-                        {item.result}
-                      </span>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </article>
             </Reveal>
