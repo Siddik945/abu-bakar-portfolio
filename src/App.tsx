@@ -56,16 +56,8 @@ function LinkedinIcon({ size = 18, className = "" }) {
 const navItems = ["About", "Skills", "Projects", "Achievements", "Contact"];
 
 function App() {
-  const [dark, setDark] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("portfolio-theme");
-    const shouldUseDark = stored ? stored === "dark" : true;
-    setDark(shouldUseDark);
-    document.documentElement.classList.toggle("dark", shouldUseDark);
-  }, []);
 
   useEffect(() => {
     const sections = document.querySelectorAll("section[id]");
@@ -92,22 +84,12 @@ function App() {
 
   const getBackgroundGradient = () => {
     const gradients = {
-      home: dark ? "bg-slate-950" : "bg-slate-50",
-      about: dark
-        ? "bg-gradient-to-br from-slate-950 to-cyan-950/30"
-        : "bg-gradient-to-br from-slate-50 to-cyan-50",
-      skills: dark
-        ? "bg-gradient-to-br from-slate-950 to-violet-950/30"
-        : "bg-gradient-to-br from-slate-50 to-violet-50",
-      projects: dark
-        ? "bg-gradient-to-br from-slate-950 to-blue-950/30"
-        : "bg-gradient-to-br from-slate-50 to-blue-50",
-      achievements: dark
-        ? "bg-gradient-to-br from-slate-950 to-amber-950/30"
-        : "bg-gradient-to-br from-slate-50 to-amber-50",
-      contact: dark
-        ? "bg-gradient-to-br from-slate-950 to-emerald-950/30"
-        : "bg-gradient-to-br from-slate-50 to-emerald-50",
+      home: "bg-slate-50",
+      about: "bg-gradient-to-br from-slate-50 to-cyan-50",
+      skills: "bg-gradient-to-br from-slate-50 to-violet-50",
+      projects: "bg-gradient-to-br from-slate-50 to-blue-50",
+      achievements: "bg-gradient-to-br from-slate-50 to-amber-50",
+      contact: "bg-gradient-to-br from-slate-50 to-emerald-50",
     };
     return gradients[activeSection as keyof typeof gradients] || gradients.home;
   };
@@ -128,9 +110,9 @@ function App() {
 
   return (
     <div
-      className={`min-h-screen overflow-hidden text-slate-900 selection:bg-cyan-300 selection:text-slate-950 dark:text-slate-100 transition-colors duration-700 ${getBackgroundGradient()}`}
+      className={`min-h-screen overflow-hidden text-slate-900 selection:bg-cyan-300 selection:text-slate-950 transition-colors duration-700 ${getBackgroundGradient()}`}
     >
-      <div className="pointer-events-none fixed inset-0 z-0 bg-grid opacity-50 dark:opacity-35" />
+      <div className="pointer-events-none fixed inset-0 z-0 bg-grid opacity-50" />
       <div
         className={`pointer-events-none fixed left-[-8rem] top-24 z-0 h-80 w-80 rounded-full ${accent.left} blur-3xl transition-colors duration-700`}
       />
@@ -138,14 +120,14 @@ function App() {
         className={`pointer-events-none fixed right-[-10rem] top-[35rem] z-0 h-96 w-96 rounded-full ${accent.right} blur-3xl transition-colors duration-700`}
       />
 
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/60 bg-white/75 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/70">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/60 bg-white/75 backdrop-blur-xl">
         <nav className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
           <a
             href="#home"
             className="group flex items-center gap-3"
             aria-label="Go to homepage"
           >
-            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-slate-950 font-display text-sm font-extrabold text-white shadow-lg shadow-cyan-500/10 dark:bg-white dark:text-slate-950">
+            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-slate-950 font-display text-sm font-extrabold text-white shadow-lg shadow-cyan-500/10">
               AB
             </span>
             <span className="hidden font-display text-sm font-bold tracking-tight sm:block">
@@ -160,7 +142,7 @@ function App() {
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  className={`nav-link ${isActive ? "rounded-full bg-cyan-100 px-4 py-2 text-cyan-700 dark:bg-cyan-400/20 dark:text-cyan-300" : ""}`}
+                  className={`nav-link ${isActive ? "rounded-full bg-cyan-100 px-4 py-2 text-cyan-700" : ""}`}
                 >
                   {item}
                 </a>
@@ -178,7 +160,7 @@ function App() {
             </button> */}
             <a
               href="#contact"
-              className="hidden rounded-full bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-cyan-600 sm:inline-flex dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-300"
+              className="hidden rounded-full bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-cyan-600 sm:inline-flex"
             >
               Hire me
             </a>
@@ -193,7 +175,7 @@ function App() {
         </nav>
 
         {menuOpen && (
-          <div className="border-t border-slate-200 bg-white px-5 py-5 md:hidden dark:border-white/10 dark:bg-slate-950">
+          <div className="border-t border-slate-200 bg-white px-5 py-5 md:hidden">
             <div className="mx-auto flex max-w-7xl flex-col gap-2">
               {navItems.map((item) => {
                 const isActive = activeSection === item.toLowerCase();
@@ -202,7 +184,7 @@ function App() {
                     key={item}
                     href={`#${item.toLowerCase()}`}
                     onClick={() => setMenuOpen(false)}
-                    className={`rounded-xl px-4 py-3 font-medium hover:bg-slate-100 dark:hover:bg-white/5 ${isActive ? "bg-cyan-100 text-cyan-700 dark:bg-cyan-400/20 dark:text-cyan-300" : ""}`}
+                    className={`rounded-xl px-4 py-3 font-medium hover:bg-slate-100 ${isActive ? "bg-cyan-100 text-cyan-700" : ""}`}
                   >
                     {item}
                   </a>
@@ -220,23 +202,20 @@ function App() {
         >
           <div className="mx-auto grid w-full max-w-7xl items-center gap-14 px-5 py-20 lg:grid-cols-[1.15fr_0.85fr] lg:px-8">
             <Reveal>
-              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-200">
+              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-800">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
                 {portfolio.availability}
               </div>
 
-              <h1 className="mt-7 font-display text-5xl font-extrabold leading-[1.02] tracking-[-0.045em] text-slate-950 sm:text-6xl lg:text-7xl dark:text-white">
+              <h1 className="mt-7 font-display text-5xl font-extrabold leading-[1.02] tracking-[-0.045em] text-slate-950 sm:text-6xl lg:text-7xl">
                 Building useful products with{" "}
                 <span className="bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500 bg-clip-text text-transparent">
                   clean code.
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-                I’m{" "}
-                <strong className="text-slate-950 dark:text-white">
-                  {portfolio.name}
-                </strong>
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+                I’m <strong className="text-slate-950">{portfolio.name}</strong>
                 , a {portfolio.role.toLowerCase()} focused on modern React
                 interfaces, scalable backend APIs and practical business
                 systems.
@@ -255,7 +234,7 @@ function App() {
                 </a>
               </div>
 
-              <div className="mt-8 flex flex-wrap items-center gap-5 text-sm text-slate-600 dark:text-slate-400">
+              <div className="mt-8 flex flex-wrap items-center gap-5 text-sm text-slate-600">
                 <span className="inline-flex items-center gap-2">
                   <MapPin size={16} /> {portfolio.location}
                 </span>
@@ -267,17 +246,17 @@ function App() {
 
             <Reveal delay={150} className="relative mx-auto w-full max-w-lg">
               <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-cyan-400/25 via-blue-500/10 to-violet-500/20 blur-3xl" />
-              <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white/80 p-6 shadow-2xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.055] dark:shadow-black/40">
-                <div className="flex items-center justify-between border-b border-slate-200 pb-5 dark:border-white/10">
+              <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white/80 p-6 shadow-2xl shadow-slate-950/10 backdrop-blur-xl">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-5">
                   <div className="flex items-center gap-3">
                     <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 font-display text-sm font-black text-white">
                       AB
                     </div>
                     <div>
-                      <p className="font-display font-bold text-slate-950 dark:text-white">
+                      <p className="font-display font-bold text-slate-950">
                         Developer profile
                       </p>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">
+                      <p className="text-sm text-slate-500">
                         React • NestJS • Databases
                       </p>
                     </div>
@@ -290,12 +269,12 @@ function App() {
                     (stat: { value: string; label: string }) => (
                       <div
                         key={stat.label}
-                        className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/[0.04]"
+                        className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
                       >
-                        <p className="font-display text-2xl font-extrabold text-slate-950 dark:text-white">
+                        <p className="font-display text-2xl font-extrabold text-slate-950">
                           {stat.value}
                         </p>
-                        <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                        <p className="mt-1 text-xs leading-5 text-slate-500">
                           {stat.label}
                         </p>
                       </div>
@@ -311,12 +290,9 @@ function App() {
                   ].map((item) => (
                     <div
                       key={item}
-                      className="flex items-center gap-3 rounded-2xl bg-slate-950 px-4 py-3 text-sm font-medium text-white dark:bg-white dark:text-slate-950"
+                      className="flex items-center gap-3 rounded-2xl bg-slate-950 px-4 py-3 text-sm font-medium text-white"
                     >
-                      <CheckCircle2
-                        size={17}
-                        className="text-cyan-400 dark:text-cyan-600"
-                      />{" "}
+                      <CheckCircle2 size={17} className="text-cyan-400" />{" "}
                       {item}
                     </div>
                   ))}
@@ -335,13 +311,13 @@ function App() {
           <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
             <Reveal>
               <article className="surface-card h-full p-7 sm:p-9">
-                <div className="mb-6 grid h-12 w-12 place-items-center rounded-2xl bg-cyan-100 text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-300">
+                <div className="mb-6 grid h-12 w-12 place-items-center rounded-2xl bg-cyan-100 text-cyan-700">
                   <Code2 />
                 </div>
-                <h3 className="font-display text-2xl font-bold text-slate-950 dark:text-white">
+                <h3 className="font-display text-2xl font-bold text-slate-950">
                   Developer mindset
                 </h3>
-                <p className="mt-4 leading-8 text-slate-600 dark:text-slate-300">
+                <p className="mt-4 leading-8 text-slate-600">
                   {portfolio.summary}
                 </p>
                 <div className="mt-7 flex flex-wrap gap-2">
@@ -362,19 +338,19 @@ function App() {
 
             <Reveal delay={120}>
               <article className="surface-card h-full p-7 sm:p-9">
-                <div className="mb-6 grid h-12 w-12 place-items-center rounded-2xl bg-violet-100 text-violet-700 dark:bg-violet-400/10 dark:text-violet-300">
+                <div className="mb-6 grid h-12 w-12 place-items-center rounded-2xl bg-violet-100 text-violet-700">
                   <GraduationCap />
                 </div>
-                <h3 className="font-display text-2xl font-bold text-slate-950 dark:text-white">
+                <h3 className="font-display text-2xl font-bold text-slate-950">
                   Education
                 </h3>
-                <p className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+                <p className="mt-4 text-lg font-semibold text-slate-900">
                   {portfolio.education.degree}
                 </p>
-                <p className="mt-2 leading-7 text-slate-600 dark:text-slate-300">
+                <p className="mt-2 leading-7 text-slate-600">
                   {portfolio.education.school}
                 </p>
-                <p className="mt-4 inline-flex rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-600 dark:bg-white/5 dark:text-slate-300">
+                <p className="mt-4 inline-flex rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-600">
                   {portfolio.education.period}
                 </p>
               </article>
@@ -392,12 +368,12 @@ function App() {
             {portfolio.skills.map(
               (group: { title: string; items: string[] }, index: number) => (
                 <Reveal key={group.title} delay={index * 60}>
-                  <article className="surface-card group h-full p-6 transition duration-300 hover:-translate-y-1 hover:border-cyan-300 dark:hover:border-cyan-400/30">
+                  <article className="surface-card group h-full p-6 transition duration-300 hover:-translate-y-1 hover:border-cyan-300">
                     <div className="flex items-center gap-3">
-                      <div className="grid h-11 w-11 place-items-center rounded-2xl bg-slate-950 text-white transition group-hover:bg-cyan-600 dark:bg-white dark:text-slate-950 dark:group-hover:bg-cyan-300">
+                      <div className="grid h-11 w-11 place-items-center rounded-2xl bg-slate-950 text-white transition group-hover:bg-cyan-600">
                         <Layers3 size={20} />
                       </div>
-                      <h3 className="font-display text-lg font-bold text-slate-950 dark:text-white">
+                      <h3 className="font-display text-lg font-bold text-slate-950">
                         {group.title}
                       </h3>
                     </div>
@@ -430,13 +406,13 @@ function App() {
                   />
                   <div className="relative grid gap-8 lg:grid-cols-[1fr_0.85fr] lg:items-start">
                     <div>
-                      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-300">
+                      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-700">
                         {project.type}
                       </p>
-                      <h3 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-slate-950 dark:text-white">
+                      <h3 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-slate-950">
                         {project.title}
                       </h3>
-                      <p className="mt-4 max-w-2xl leading-8 text-slate-600 dark:text-slate-300">
+                      <p className="mt-4 max-w-2xl leading-8 text-slate-600">
                         {project.description}
                       </p>
                       <div className="mt-6 flex flex-wrap gap-2">
@@ -458,15 +434,15 @@ function App() {
                         </a>
                       </div>
                     </div>
-                    <div className="rounded-3xl border border-white/50 bg-white/70 p-5 backdrop-blur dark:border-white/10 dark:bg-slate-950/50">
-                      <div className="mb-4 flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+                    <div className="rounded-3xl border border-white/50 bg-white/70 p-5 backdrop-blur">
+                      <div className="mb-4 flex items-center gap-2 text-sm font-bold text-slate-900">
                         <BriefcaseBusiness size={17} /> Project highlights
                       </div>
                       <ul className="space-y-3">
                         {project.highlights.map((highlight: string) => (
                           <li
                             key={highlight}
-                            className="flex gap-3 text-sm leading-6 text-slate-600 dark:text-slate-300"
+                            className="flex gap-3 text-sm leading-6 text-slate-600"
                           >
                             <CheckCircle2
                               className="mt-0.5 shrink-0 text-emerald-500"
@@ -494,10 +470,10 @@ function App() {
             <Reveal>
               <article className="surface-card h-full p-7 sm:p-9">
                 <div className="flex items-center gap-3">
-                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-amber-100 text-amber-700 dark:bg-amber-400/10 dark:text-amber-300">
+                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-amber-100 text-amber-700">
                     <Trophy />
                   </div>
-                  <h3 className="font-display text-2xl font-bold text-slate-950 dark:text-white">
+                  <h3 className="font-display text-2xl font-bold text-slate-950">
                     Highlights
                   </h3>
                 </div>
@@ -505,7 +481,7 @@ function App() {
                   {portfolio.achievements.map((achievement: string) => (
                     <li
                       key={achievement}
-                      className="flex gap-3 leading-7 text-slate-600 dark:text-slate-300"
+                      className="flex gap-3 leading-7 text-slate-600"
                     >
                       <Award
                         className="mt-1 shrink-0 text-amber-500"
@@ -520,10 +496,10 @@ function App() {
             <Reveal delay={120}>
               <article className="surface-card h-full p-7 sm:p-9">
                 <div className="flex items-center gap-3">
-                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-blue-100 text-blue-700 dark:bg-blue-400/10 dark:text-blue-300">
+                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-blue-100 text-blue-700">
                     <BookOpen />
                   </div>
-                  <h3 className="font-display text-2xl font-bold text-slate-950 dark:text-white">
+                  <h3 className="font-display text-2xl font-bold text-slate-950">
                     Problem-solving profiles
                   </h3>
                 </div>
@@ -536,17 +512,17 @@ function App() {
                     }) => (
                       <div
                         key={item.platform}
-                        className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/[0.035]"
+                        className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4"
                       >
                         <div>
-                          <p className="font-bold text-slate-950 dark:text-white">
+                          <p className="font-bold text-slate-950">
                             {item.platform}
                           </p>
-                          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                          <p className="mt-1 text-sm text-slate-500">
                             {item.detail}
                           </p>
                         </div>
-                        <span className="rounded-full bg-slate-950 px-3 py-1.5 text-xs font-bold text-white dark:bg-white dark:text-slate-950">
+                        <span className="rounded-full bg-slate-950 px-3 py-1.5 text-xs font-bold text-white">
                           {item.result}
                         </span>
                       </div>
@@ -560,18 +536,18 @@ function App() {
 
         <section id="contact" className="section-shell pb-28">
           <Reveal>
-            <div className="relative overflow-hidden rounded-[2.25rem] bg-slate-950 px-6 py-14 text-white shadow-2xl shadow-cyan-500/10 sm:px-12 sm:py-16 dark:bg-white dark:text-slate-950">
+            <div className="relative overflow-hidden rounded-[2.25rem] bg-slate-950 px-6 py-14 text-white shadow-2xl shadow-cyan-500/10 sm:px-12 sm:py-16">
               <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-cyan-400/25 blur-3xl" />
               <div className="absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-violet-500/20 blur-3xl" />
               <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
                 <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300 dark:text-cyan-700">
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">
                     Let’s work together
                   </p>
                   <h2 className="mt-4 max-w-3xl font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
                     Have a role, project or collaboration in mind?
                   </h2>
-                  <p className="mt-5 max-w-2xl leading-8 text-slate-300 dark:text-slate-600">
+                  <p className="mt-5 max-w-2xl leading-8 text-slate-300">
                     I’m interested in opportunities where I can contribute to
                     product development, learn from a strong team and solve
                     meaningful technical problems.
@@ -580,26 +556,26 @@ function App() {
                 <div className="flex flex-wrap gap-3 lg:justify-end">
                   <a
                     href={`mailto:${portfolio.email}`}
-                    className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-semibold text-slate-950 transition hover:-translate-y-0.5 dark:bg-slate-950 dark:text-white"
+                    className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-semibold text-slate-950 transition hover:-translate-y-0.5"
                   >
                     <Mail size={18} /> absiddik945@gmail.com
                   </a>
                   <a
                     href={`tel:${portfolio.phone.replace(/\s/g, "")}`}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 font-semibold transition hover:bg-white/10 dark:border-slate-300 dark:hover:bg-slate-100"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 font-semibold transition hover:bg-white/10"
                   >
                     <Phone size={18} /> +8801766-229353
                   </a>
                 </div>
               </div>
-              <div className="relative mt-10 flex flex-wrap gap-3 border-t border-white/10 pt-7 dark:border-slate-200">
+              <div className="relative mt-10 flex flex-wrap gap-3 border-t border-white/10 pt-7">
                 <a href={portfolio.social.github} className="social-button">
                   <GithubIcon size={18} /> GitHub <ArrowUpRight size={15} />
                 </a>
                 <a href={portfolio.social.linkedin} className="social-button">
                   <LinkedinIcon size={18} /> LinkedIn <ArrowUpRight size={15} />
                 </a>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2.5 text-sm text-slate-300 dark:border-slate-200 dark:text-slate-600">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2.5 text-sm text-slate-300">
                   <MapPin size={16} /> {portfolio.location}
                 </span>
               </div>
@@ -608,7 +584,7 @@ function App() {
         </section>
       </main>
 
-      <footer className="relative z-10 border-t border-slate-200 px-5 py-7 text-center text-sm text-slate-500 dark:border-white/10 dark:text-slate-400">
+      <footer className="relative z-10 border-t border-slate-200 px-5 py-7 text-center text-sm text-slate-500">
         © {new Date().getFullYear()} {portfolio.name}. Built with React.js and
         Tailwind CSS.
       </footer>
