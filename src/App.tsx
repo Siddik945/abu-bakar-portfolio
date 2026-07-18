@@ -14,10 +14,8 @@ import {
   Mail,
   MapPin,
   Menu,
-  Moon,
   Phone,
   Sparkles,
-  Sun,
   Trophy,
   X,
 } from "lucide-react";
@@ -91,17 +89,6 @@ function App() {
       sections.forEach((section) => observer.unobserve(section));
     };
   }, []);
-
-  const toggleTheme = () => {
-    const next = !dark;
-    setDark(next);
-    if (next) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-    localStorage.setItem("portfolio-theme", next ? "dark" : "light");
-  };
 
   const getBackgroundGradient = () => {
     const gradients = {
