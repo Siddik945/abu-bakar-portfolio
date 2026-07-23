@@ -151,13 +151,6 @@ function App() {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* <button
-              onClick={toggleTheme}
-              className="icon-button"
-              aria-label="Toggle theme"
-            >
-              {dark ? <Sun size={18} /> : <Moon size={18} />}
-            </button> */}
             <a
               href="#contact"
               className="hidden rounded-full bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-cyan-600 sm:inline-flex"
